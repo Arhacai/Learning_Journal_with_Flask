@@ -44,6 +44,7 @@ def after_request(response):
 
 @app.route('/login', methods=('GET', 'POST'))
 def login():
+    """Login user."""
     form = forms.LoginForm()
     if form.validate_on_submit():
         try:
@@ -63,6 +64,7 @@ def login():
 @app.route('/logout')
 @login_required
 def logout():
+    """Logout user."""
     logout_user()
     flash("You've been logged out! Come back soon!", "success")
     return redirect(url_for('show_entries'))
@@ -71,6 +73,10 @@ def logout():
 @app.route('/entry', methods=('GET', 'POST'))
 @login_required
 def add_entry():
+    """
+    Add a new entry to the journal list. These are the fields:
+    Title, Date, Time Spent, What you learned and Resources
+    """
     form = forms.AddEntry()
     if form.validate_on_submit():
         models.Entry.create(
@@ -90,6 +96,11 @@ def add_entry():
 @app.route('/entries')
 @app.route('/entries/<tag>')
 def show_entries(tag=None):
+    """
+    Displays a list of journal entries, with Title, Date and Tags
+    as fields. Title is a hyperlink to the detail page for that
+    entry. Tags filters the entries to show only the tagged ones.
+    """
     if tag:
         entries = models.Entry.select().where(
             models.Entry.tags.contains(tag)
@@ -106,6 +117,10 @@ def show_entries(tag=None):
 @app.route('/details/<slug>')
 @login_required
 def show_details(slug):
+    """
+    Displays all info for the entry selected. It also let the user
+    to edit or delete the entry.
+    """
     try:
         entry = models.Entry.get(
             models.Entry.slug == slug
@@ -118,6 +133,7 @@ def show_details(slug):
 @app.route('/entries/edit/<slug>', methods=('GET', 'POST'))
 @login_required
 def edit_entry(slug):
+    """Allows the user to edit the current entry."""
     try:
         entry = models.Entry.get(
             models.Entry.slug == slug
@@ -149,6 +165,7 @@ def edit_entry(slug):
 @app.route('/entries/delete/<slug>')
 @login_required
 def delete_entry(slug):
+    """Let the user to delete the current entry."""
     try:
         entry = models.Entry.get(models.Entry.slug == slug)
     except models.DoesNotExist:
@@ -161,6 +178,7 @@ def delete_entry(slug):
 
 @app.errorhandler(404)
 def not_found(error):
+    """404 error page."""
     return render_template('404.html'), 404
 
 

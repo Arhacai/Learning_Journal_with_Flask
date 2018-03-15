@@ -6,16 +6,19 @@ from models import Entry
 
 
 def title_exists(form, field):
+    """Checks if there is already an entry with that title."""
     if Entry.select().where(Entry.title == field.data).exists():
         raise ValidationError("Entry with that title already exists.")
 
 
 class LoginForm(Form):
+    """Form to create a user on database."""
     email = StringField('Email', validators=[DataRequired(), Email()])
     password = PasswordField('Password', validators=[DataRequired()])
 
 
 class AddEntry(Form):
+    """Form for adding a new entry to the database."""
     title = StringField(
         'Title',
         validators=[DataRequired(), title_exists]
@@ -40,6 +43,7 @@ class AddEntry(Form):
 
 
 class EditEntry(Form):
+    """Form to edit the current entry on the database."""
     title = StringField(
         'Title',
         validators=[DataRequired(), title_exists]
