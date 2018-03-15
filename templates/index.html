@@ -1,0 +1,18 @@
+{% extends 'layout.html' %}
+{% block content %}
+    <div class="container">
+        <div class="entry-list">
+            {% if current_user.is_authenticated %}
+            {% for entry in entries %}
+            <article>
+                <h2><a href="{{ url_for('show_details', slug=entry.slug) }}">{{ entry.title }}</a></h2>
+                <time datetime="2016-01-31">{{ entry.date.strftime('%B %d, %Y') }}</time>
+                {% for tag in entry.tags.split(" ") %}
+                    <span class="tag"><a href="{{ url_for('show_entries', tag=tag) }}">{{ tag }}</a></span>
+                {% endfor %}
+            </article>
+            {% endfor %}
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

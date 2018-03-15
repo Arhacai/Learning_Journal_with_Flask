@@ -1,0 +1,17 @@
+{% extends 'layout.html' %}
+{% from 'macros.html' import render_field %}
+{% block content %}
+    <div class="container">
+        <div class="edit-entry">
+            <h2>Edit Entry</h2>
+            <form>
+                {{ form.hidden_tag() }}
+                {% for field in form %}
+                    {{ render_field(field) }}
+                {% endfor %}
+                <input type="submit" value="Edit Entry" class="button">
+                <a href="{{ url_for('show_entries') }}" class="button button-secondary">Cancel</a>
+            </form>
+        </div>
+    </div>
+{% endblock %}
